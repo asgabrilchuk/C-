@@ -1,0 +1,134 @@
+// ProgramDlg.cpp : implementation file //
+
+#include "stdafx.h" #include "Program.h" #include "ProgramDlg.h" #include "afxdialogex.h"
+
+#ifdef _DEBUG #define new DEBUG_NEW #endif
+
+// CProgramDlg dialog
+
+CProgramDlg::CProgramDlg(CWnd* pParent /=nullptr/) : CDialog(IDD_PROGRAM_DIALOG, pParent) { m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME); }
+
+void CProgramDlg::DoDataExchange(CDataExchange* pDX) { fg = true;
+
+SetWindowTextW(L"Program");
+
+CDialog::DoDataExchange(pDX);
+}
+
+BEGIN_MESSAGE_MAP(CProgramDlg, CDialog) ON_WM_PAINT() ON_WM_QUERYDRAGICON() END_MESSAGE_MAP()
+
+// CProgramDlg message handlers
+
+BOOL CProgramDlg::OnInitDialog() { CDialog::OnInitDialog();
+
+// Set the icon for this dialog.  The framework does this automatically
+//  when the application's main window is not a dialog
+SetIcon(m_hIcon, TRUE);			// Set big icon
+SetIcon(m_hIcon, FALSE);		// Set small icon
+
+// TODO: Add extra initialization here
+
+return TRUE;  // return TRUE  unless you set the focus to a control
+}
+
+// If you add a minimize button to your dialog, you will need the code below // to draw the icon. For MFC applications using the document/view model, // this is automatically done for you by the framework.
+
+void CProgramDlg::OnPaint() { if (IsIconic()) { CPaintDC dc(this); // device context for painting
+
+	SendMessage(WM_ICONERASEBKGND, reinterpret_cast<WPARAM>(dc.GetSafeHdc()), 0);
+
+	// Center icon in client rectangle
+	int cxIcon = GetSystemMetrics(SM_CXICON);
+	int cyIcon = GetSystemMetrics(SM_CYICON);
+	CRect rect;
+	GetClientRect(&rect);
+	int x = (rect.Width() - cxIcon + 1) / 2;
+	int y = (rect.Height() - cyIcon + 1) / 2;
+
+	// Draw the icon
+	dc.DrawIcon(x, y, m_hIcon);
+}
+else
+{
+	CClientDC dc(this);
+	GetClientRect(&rc);
+
+	dc.FillSolidRect(&rc, RGB(255, 255, 255));
+
+	RH = abs(rc.right - rc.left);
+	RW = abs(rc.top - rc.bottom);
+
+	dx = RH / 3;
+	dy = RW / 2;
+
+	CRect w;
+	x1 = w.left = rc.left + 300;
+	x2 = w.right = rc.right - 180;
+	y1 = w.top = rc.top + 150;
+	y2 = w.bottom = rc.bottom - 200;
+
+	dc.FillSolidRect(&w, RGB(15, 55, 155));
+	//m = CreateSolidBrush(RGB(0, 0, 0));
+	//oldm = (HBRUSH)dc.SelectObject(m);
+	cf = RGB(0, 0, 0);
+	hPenOxy = CreatePen(PS_SOLID, 12, cf);
+	hOldPen = (HPEN)SelectObject(dc, hPenOxy);
+
+	dc.MoveTo(x1, y1);
+	dc.LineTo(x2, y1);
+	dc.LineTo(x2, y2);
+	dc.LineTo(x1, y2);
+	dc.LineTo(x1, y1);
+
+	dc.MoveTo(x1-20, y1+30);
+	dc.LineTo(x1-110, y1+30);
+	dc.LineTo(x1 - 140, y2-80);
+	dc.LineTo(x1 - 140, y2 + 40);
+	dc.LineTo(x1 + 240, y2 + 40);
+	dc.LineTo(x1 + 240, y2);
+	dc.LineTo(x1 -20, y2);
+	dc.LineTo(x1 - 20, y1+30);
+
+	dc.MoveTo(x1 - 40, y1+50);
+	dc.LineTo(x1 - 90, y1+50);
+	dc.LineTo(x1 - 115, y2 - 60);
+	dc.LineTo(x1 - 40, y2 - 60);
+	dc.LineTo(x1 - 40, y1 + 50);
+
+
+	dc.FillSolidRect(&w, RGB(1, 1, 1));
+	cf = RGB(0, 0, 0);
+
+	dc.Rectangle(&w);
+
+	
+
+	x = x2 - 160;
+	y = y2;
+	int r1 = 80;
+	dc.Ellipse(x, y, x + r1, y + r1);
+	
+	x = x2 - 177;
+	y = y2-18;
+	int r2 = 70;
+	dc.Ellipse(x + r2 / 2, y + r2 / 2, x + r2+10, y + r2+10);
+
+
+	x = x1 - 120; 
+	y = y2;
+	dc.Ellipse(x, y, x + r1, y + r1);
+	
+	x = x1 - 138;
+	y = y2-18;
+	dc.Ellipse(x + r2 / 2, y + r2 / 2, x + r2+10, y + r2+10);
+
+	SelectObject(dc, hOldPen);
+	DeleteObject(hPenOxy);
+	hPenOxy = CreatePen(PS_SOLID, 12, cf);
+	hOldPen = (HPEN)SelectObject(dc, hPenOxy);
+	CDialog::OnPaint();
+}
+}
+
+// The system calls this function to obtain the cursor to display while the user drags // the minimized window. HCURSOR CProgramDlg::OnQueryDragIcon() { return static_cast(m_hIcon); }
+
